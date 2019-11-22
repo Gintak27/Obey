@@ -1,0 +1,26 @@
+    /*
+ Animated.sequence([
+    Animated.timing(this.animatedValue, {
+        delay: 100,
+        duration: 2000,
+        toValue: 150
+    }),
+    Animated.timing(this.animatedValue, {
+        delay: 1000,
+        duration: 2000,
+        toValue: 0
+    }),
+        Animated.timing(this.animatedValue, {
+        delay: 1000,
+        duration: 2000,
+        toValue: 150
+    })
+]).start();
+*/
+
+        <Video
+          source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+          shouldPlay
+          resizeMode="cover"
+          style={{width: 300, height: 300 }}
+        />

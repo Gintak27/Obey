@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "Obey: The Game",
+    "description": "Sequence based game that awards user points for each correct answer.\nSequences become harder and new challenges occur\nas the user progresses.",
+    "slug": "snack-HJJpkCaNH",
+    "privacy": "public",
+    "sdkVersion": "34.0.0",
+    "version": "1.5.0",
+    "orientation": "portrait",
+    "primaryColor": "#00c4cc",
+    "icon": "/Users/kj/Downloads/obey/assets/icons/obeyIcon.png",
+    "loading": {
+      "icon": "/Users/kj/Downloads/obey/assets/icons/obeyIcon.png",
+      "hideExponentText": false
+    },
+    "packagerOpts": {
+      "assetExts": [
+        "ttf",
+        "mp4",
+        "otf",
+        "xml"
+      ]
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.alpha.obey"
+    },
+    "android": {
+      "package": "com.alpha.obey"
+    },
+    "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 30000
+    }
+  }
+}
