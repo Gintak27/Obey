@@ -96,7 +96,7 @@ firebase.initializeApp(firebaseConfig);
     });
 
   }
-
+ 
   registerForPushNotificationsAsync = async (user) => {
     const { existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
     let finalStatus = existingStatus;
