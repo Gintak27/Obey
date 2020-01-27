@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
+
+
 import HomeActivity from './components/HomeActivity';
 import GameActivity from './components/GameActivity';
 import SplashScreen from './components/SplashScreen';

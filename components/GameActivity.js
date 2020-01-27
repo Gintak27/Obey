@@ -127,7 +127,7 @@ export default class GameActivity extends Component {
           {this.state.hscore}
         </Text>
         </View>
-        <Text style={styles.score}>
+        <Text style={styles.score} adjustsFontSizeToFit>
           {this.state.cscore}
         </Text>
         <View style={styles.container}>

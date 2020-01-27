@@ -6,24 +6,36 @@ import {
   PublisherBanner,
   AdMobRewarded
 } from 'expo-ads-admob';
-import { Platform, StyleSheet, Text, View, Button, TouchableHighlight, TouchableOpacity, Animated, Image, ImageBackground } from 'react-native';
+
+import { Modal, StyleSheet, Text, View, Button, TouchableHighlight, TouchableOpacity, Animated, Image, ImageBackground } from 'react-native';
 import { Audio } from 'expo-av'
 const StartButton = Animated.createAnimatedComponent(TouchableHighlight);
+import soundImg from '/Users/kj/Downloads/obey/assets/soundOn.png';
+import muteImg from '/Users/kj/Downloads/obey/assets/soundOff.png';
 
 
 class HomeActivity extends React.Component {
+
 
   constructor(props) {
     super(props);
     this.playbackInstance = null;
     this.muted = false;
+    this.state = {
+      showSoundImg: true,
+      modalVisible: false,//lose modal pop up
+    };
+
   }
+
+
   componentWillMount() {
     this.animatedValue = new Animated.Value(0);
 
   }
 
   componentDidMount() {
+
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', () => {
       this.animatedValue.setValue(0);
@@ -38,8 +50,11 @@ class HomeActivity extends React.Component {
       staysActiveInBackground: false,
     });
     //  This function will be called
-    this._loadNewPlaybackInstance(true);
+    this._loadNewPlaybackInstance(true); 
+
   }
+
+
 
   componentWillUnmount() {
     // Remove the event listener
@@ -83,7 +98,9 @@ class HomeActivity extends React.Component {
     //this.playbackInstance.setIsMutedAsync(true);
   }
 
-
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });//set if modal visible 
+  }
 
   startGame = () => {
     //start game 
@@ -99,9 +116,10 @@ class HomeActivity extends React.Component {
 
 
   }
-  
+
   muteMusic = () => {
-   
+
+    this.setState({ showSoundImg: !this.state.showSoundImg })
 
     if (this.muted === true) {
       this.muted = false
@@ -115,11 +133,21 @@ class HomeActivity extends React.Component {
 
   }
 
-  bannerError = ()  =>{
+  renderImage = () => {
+    var imgSource = this.state.showSoundImg ? muteImg : soundImg;
+    return (
+      <Image
+        style={nStyles.mute}
+        source={imgSource}
+      />
+    );
+  }
+
+  bannerError = () => {
     console.log("An error");
     return;
   }
-  
+
   render() {
     const scaleUP = this.animatedValue.interpolate({
       inputRange: [0, 0.5, 1],
@@ -141,16 +169,49 @@ class HomeActivity extends React.Component {
             activeOpacity={1}>
             <Text>  </Text>
           </StartButton>
-
         </View>
+
+        <View style={nStyles.info}>
+          <TouchableOpacity onPress={() => this.setModalVisible(true)}>
+            <Image style={nStyles.mute} source={require('/Users/kj/Downloads/obey/assets/info.png')} />
+          </TouchableOpacity>
+        </View>
+
+        <Modal
+          animationType="slide"
+          backdropColor={'red'}
+          backdropOpacity={0.5}
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+
+
+            <Image style={nStyles.instructions} source={require('/Users/kj/Downloads/obey/assets/instruction.jpg')} />
+            <TouchableHighlight
+              style={nStyles.closeInfo}
+              activeOpacity={1}
+              onPress={() => {
+                this.setModalVisible(false)
+              }}
+            >
+              <Image style={nStyles.closeX} source={require('/Users/kj/Downloads/obey/assets/closeX.png')} />
+            </TouchableHighlight>
+          </View>
+        </Modal>
+
         <View style={nStyles.muteContainer}>
           <TouchableOpacity onPress={() => this.muteMusic()}>
-
-            <Image style={nStyles.mute} source={require('/Users/kj/Downloads/obey/assets/music.png')} />
-
+            {this.renderImage()}
           </TouchableOpacity>
-
         </View>
+
         <AdMobBanner
           style={nStyles.bottomBanner}
           bannerSize="fullBanner"
@@ -159,6 +220,7 @@ class HomeActivity extends React.Component {
           testDeviceID="EMULATOR"
           didFailToReceiveAdWithError={this.bannerError}
         />
+
       </ImageBackground>
     );
   }
@@ -192,15 +254,15 @@ const nStyles = StyleSheet.create({
     top: 100,
   },
   mute: {
-    height: 30,
-    width: 30,
+    height: 45,
+    width: 45,
     justifyContent: 'center',
     alignItems: 'center',
   },
   muteContainer: {
     flex: 1,
-    height:35,
-    width:35,
+    height: 45,
+    width: 45,
     justifyContent: 'flex-end',
     marginBottom: 36,
     paddingLeft: 30,
@@ -208,6 +270,48 @@ const nStyles = StyleSheet.create({
   bottomBanner: {
     //position: "absolute",
     bottom: 0
+  },
+  info: {
+    flex: 1,
+    alignSelf: 'flex-start',
+    marginTop: 50,
+    paddingLeft: 30,
+    height: 45,
+    width: 45,
+    //top: 70,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 150,
+    width: 300,
+    height: 300,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  instructions: {
+    height: 385,
+    width: 305,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeInfo: {
+    backgroundColor: '#ff1e1e',
+    padding: 20,
+    margin: -10,
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeX: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
 });

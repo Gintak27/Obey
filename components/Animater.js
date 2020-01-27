@@ -78,6 +78,13 @@ export default class Animater extends Component {
       console.log('unmount buttonplay');
       }
 
+      if (this.startPlay != null) {
+        this.startPlay.unloadAsync();
+        //  Check Your Console To verify that the above line is working
+        console.log('unmount startPLay');
+        }
+  
+
       AdMobInterstitial.removeAllListeners();
   }
   componentDidMount() {
@@ -91,7 +98,7 @@ export default class Animater extends Component {
       playThroughEarpieceAndroid: false,
       staysActiveInBackground: false,
     });
-    //  This function will be called
+   
 
     AdMobInterstitial.setTestDeviceID("EMULATOR");
     // ALWAYS USE TEST ID for Admob ads
@@ -196,6 +203,38 @@ export default class Animater extends Component {
     this.buttonPlay.playAsync();
   }
 
+  async _startPlay(playing) {
+    if (this.startPlay != null) {
+      await this.startPlay.unloadAsync();
+      this.startPlay.setOnPlaybackStatusUpdate(null);
+      this.startPlay = null;
+    }
+    const source = require('/Users/kj/Downloads/obey/assets/startSignal.m4a');
+    const initialStatus = {
+      //        Play by default
+      shouldPlay: true,
+      //        Control the speed
+      rate: 1.0,
+      //        Correct the pitch
+      shouldCorrectPitch: true,
+      //        Control the Volume
+      volume: 1.0,
+      //        mute the Audio
+      isMuted: false
+    };
+    const { sound, status } = await Audio.Sound.createAsync(
+      source,
+      initialStatus
+    );
+    //  Save the response of sound in playbackInstance
+    this.startPlay = sound;
+    //  Make the loop of Audio
+    //this.playbackInstance.setIsLoopingAsync(false);
+    //  Play the Music
+    this.startPlay.playAsync();
+  }
+
+
   async _loadNewPlaybackInstance(playing) {
     if (this.playbackInstance != null) {
       await this.playbackInstance.unloadAsync();
@@ -282,7 +321,6 @@ export default class Animater extends Component {
   }
 
 
-
   random = () => {
     // console.log('The Count ' + );
     //score / 5 = amount 
@@ -294,6 +332,8 @@ export default class Animater extends Component {
     if (this.count > base + (Math.floor((this.props.currentScore / 5)) * 2)) {
       //if count greater than the amount algo says to light up thats the end
       this.setDisabled(false);
+      //play start sound
+      this._startPlay(true);
       console.log("Disabled: " + this.state.disabled);
       return -1;
     } else {
