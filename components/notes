@@ -1,0 +1,130 @@
+    /*
+ Animated.sequence([
+    Animated.timing(this.animatedValue, {
+        delay: 100,
+        duration: 2000,
+        toValue: 150
+    }),
+    Animated.timing(this.animatedValue, {
+        delay: 1000,
+        duration: 2000,
+        toValue: 0
+    }),
+        Animated.timing(this.animatedValue, {
+        delay: 1000,
+        duration: 2000,
+        toValue: 150
+    })
+]).start();
+*/
+
+        <Video
+          source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+          shouldPlay
+          resizeMode="cover"
+          style={{width: 300, height: 300 }}
+        />
+
+
+
+
+<Image style={nStyles.mute} source={require('/Users/kj/Downloads/obey/assets/output-onlinepngtools.png')} />
+
+        <View style={nStyles.info}>
+          <TouchableOpacity onPress={() => console.log("INFO PRESS")}>
+            <Image style={nStyles.mute} source={require('/Users/kj/Downloads/obey/assets/info.png')} />
+          </TouchableOpacity>
+        </View>
+
+
+
+/*
+registerForPushNotificationsAsync = async (currentUser) => {
+  const { existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+  let finalStatus = existingStatus;
+
+  // only ask if permissions have not already been determined, because
+  // iOS won't necessarily prompt the user a second time.
+  if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+  }
+
+  // Stop here if the user did not grant permissions
+  if (finalStatus !== 'granted') {
+      return;
+  }
+
+  // Get the token that uniquely identifies this device
+  let token = await Notifications.getExpoPushTokenAsync();
+
+  // POST the token to our backend so we can use it to send pushes from there
+  var updates = {}
+  updates['/expoToken'] = token
+  await firebase.database().ref('/users/' + currentUser.uid).update(updates)
+  //call the push notification 
+}
+*/
+const firebaseConfig = {
+  apiKey: "AIzaSyDSPvuAJ5St5gGXwwPM_3LawWDKp2AOow4",
+  authDomain: "obey-the-game.firebaseapp.com",
+  databaseURL: "https://obey-the-game.firebaseio.com/",
+  projectId: "obey-the-game",
+  storageBucket: "obey-the-game.appspot.com",
+  messagingSenderId: "152006343939",
+  appId: "1:152006343939:web:d520dbe3b033fbfeb03d36",
+  measurementId: "G-Y36JGDR6CH"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+  userLogin =() =>{
+    firebase.auth().signInAnonymously();
+
+    firebase.auth().onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser) {
+        // User logged in already or has just logged in.
+        this.setState({ uID:  firebase.auth().currentUser.uid})
+        
+      } else {
+        // User not logged in or has just logged out.
+      }
+
+      this.registerForPushNotificationsAsync(this.state.uID);
+    });
+
+  }
+
+  registerForPushNotificationsAsync = async (user) => {
+    const { existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    let finalStatus = existingStatus;
+
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') {
+      return;
+    }
+
+    // Get the token that uniquely identifies this device
+    let token = await Notifications.getExpoPushTokenAsync();
+
+    console.log("TOKEN: " + token);
+    console.log(user);
+    // POST the token to our backend so we can use it to send pushes from there
+  
+    firebase.database().ref('tokens/' + user).set({
+      expotoken: token,
+    });
+
+  }
+ 
