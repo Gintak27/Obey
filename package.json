@@ -15,7 +15,7 @@
     "react-native-paper": "2.16.0",
     "react-native-video": "5.0.0",
     "react-navigation": "^2.6.2",
-    "sharp": "^0.23.3",
+    "sharp": "^0.30.5",
     "expo-permissions": "~6.0.0"
   }
 }
